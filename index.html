@@ -45,23 +45,676 @@ const tests=[
 ["32","25 Apr 2027","UGM-02","Rankly Ultimate Grand Mock 02","Full Syllabus","Full Syllabus","Full Syllabus","Full Syllabus"],
 ["33","02 May 2027","FSS","Rankly Final Selection Simulator","Full Syllabus","Full Syllabus","Full Syllabus","Full Syllabus"]];
 
-const demo=[
-["Physics","Units & Measurements","Dimensions","Which quantity has the same dimensions as work?",["Power","Torque","Pressure","Impulse"],1],
-["Chemistry","Some Basic Concepts of Chemistry","Mole Concept","One mole of a substance contains:",["6.022×10²³ entities","3.011×10²³ entities","9.8×10²³ entities","1.0×10²³ entities"],0],
-["Biology","Cell: The Unit of Life","Cell organelles","The site of aerobic respiration in a eukaryotic cell is mainly:",["Ribosome","Mitochondrion","Golgi body","Lysosome"],1]
+const demo = [
+  {
+    id:"P1",
+    subject:"Physics",
+    q:"A particle moves with constant velocity. What is its acceleration?",
+    options:["0","1 m/s²","9.8 m/s²","Cannot be determined"],
+    answer:0
+  },
+  {
+    id:"P2",
+    subject:"Physics",
+    q:"The SI unit of force is:",
+    options:["Joule","Newton","Watt","Pascal"],
+    answer:1
+  },
+  {
+    id:"C1",
+    subject:"Chemistry",
+    q:"The atomic number of oxygen is:",
+    options:["6","7","8","16"],
+    answer:2
+  },
+  {
+    id:"C2",
+    subject:"Chemistry",
+    q:"Which particle has a negative charge?",
+    options:["Proton","Neutron","Electron","Alpha particle"],
+    answer:2
+  },
+  {
+    id:"B1",
+    subject:"Biology",
+    q:"The basic structural and functional unit of life is:",
+    options:["Tissue","Cell","Organ","Organ system"],
+    answer:1
+  },
+  {
+    id:"B2",
+    subject:"Biology",
+    q:"Which organelle is known as the powerhouse of the cell?",
+    options:["Nucleus","Ribosome","Mitochondria","Golgi apparatus"],
+    answer:2
+  }
 ];
 
-let page="home",answers={},qi=0,time=1200,interval=null;
-function nav(){document.querySelector("#nav").innerHTML=[["home","Home"],["schedule","AIR Tests"],["custom","Custom"],["pyq","PYQ"]].map(x=>`<button class="${page==x[0]?"on":""}" onclick="go('${x[0]}')">${x[1]}</button>`).join("")}
-function go(p){page=p;clearInterval(interval);render()}
-function render(){nav();let a=document.querySelector("#app");
-if(page=="home")a.innerHTML=`<section class="hero"><span class="ey">NEET 2027 • AIR TEST SERIES</span><h1>Test smarter.<br><span class="blue">Rank higher.</span></h1><p>RANKLY is built around scheduled CBT tests, custom practice, verified PYQs and meaningful performance analysis.</p><button class="primary" onclick="go('schedule')">View 33-Test Schedule →</button></section><div class="grid">${[["🏆","AIR Test Series","33 scheduled tests from 20 Sep 2026 to 02 May 2027."],["🎯","Custom CBT","Choose subject, chapter, topic and question count."],["📚","PYQ Bank","Chapter → topic → year organisation."],["📊","Analysis","Score, accuracy, time and chapter-level review."]].map(x=>`<div class="card"><h3>${x[0]} ${x[1]}</h3><p>${x[2]}</p></div>`).join("")}</div><div class="notice"><b>Important:</b> Upcoming tests stay locked. Results appear only after a real attempt is submitted.</div>`;
-else if(page=="schedule")a.innerHTML=`<section class="page"><h2>33-Test AIR Schedule</h2><p class="sub">One scheduled test every Sunday. Tests remain locked until their scheduled release.</p>${tests.map(t=>`<article class="test"><div class="row"><div><span class="tag">TEST ${t[0]} • ${t[2]}</span><h3>${t[3]}</h3><p>${t[1]} • 180 Questions • 200 Minutes</p></div><span class="lock">🔒 UPCOMING</span></div><div class="syll">${[["Physics",t[4]],["Chemistry",t[5]],["Botany",t[6]],["Zoology",t[7]]].map(x=>`<div><b>${x[0]}</b><small>${x[1]}</small></div>`).join("")}</div></article>`).join("")}</section>`;
-else if(page=="custom")a.innerHTML=`<section class="page"><h2>Create Custom Test</h2><p class="sub">Custom tests are independent of AIR.</p><div class="panel"><label class="field">Subject<select><option>Physics</option><option>Chemistry</option><option>Biology</option></select></label><label class="field">Chapter<input placeholder="Enter or choose chapter"></label><label class="field">Topic<input placeholder="Optional topic"></label><label class="field">Questions<input type="number" min="1" max="180" value="30"></label><button class="primary" onclick="go('cbt')">Generate CBT →</button></div></section>`;
-else if(page=="pyq")a.innerHTML=`<section class="page"><h2>NEET PYQ Bank</h2><p class="sub">Chapter-wise and topic-wise organisation with year/source metadata.</p><div class="grid">${["Physics","Chemistry","Biology"].map(s=>`<div class="card"><h3>${s}</h3><p>Chapter → Topic → Year → CBT</p><span class="tag">VERIFIED DATA ONLY</span></div>`).join("")}</div><div class="notice">Only questions that are legally permitted to be reproduced should be imported here. Historical PYQs must retain their source/year metadata.</div></section>`;
-else cbt(a)}
-function cbt(a){if(!interval){interval=setInterval(()=>{time--;if(time<=0){clearInterval(interval);finish()}renderCBT()},1000)}renderCBT()}
-function renderCBT(){if(page!="cbt")return;let a=document.querySelector("#app"),q=demo[qi%demo.length];a.innerHTML=`<section class="cbt"><div class="qbar"><b>RANKLY CBT</b><span class="timer">${String(Math.floor(time/60)).padStart(2,"0")}:${String(time%60).padStart(2,"0")}</span></div><div class="panel"><span class="tag">${q[0]} • Question ${qi+1}</span><h2>${q[3]}</h2>${q[4].map((o,j)=>`<button class="opt ${answers[qi]===j?"sel":""}" onclick="answers[qi]=${j};renderCBT()">${String.fromCharCode(65+j)}. ${o}</button>`).join("")}<div class="actions"><button onclick="qi=Math.max(0,qi-1);renderCBT()">Previous</button><button onclick="qi=Math.min(179,qi+1);renderCBT()">Next</button><button class="submit" onclick="finish()">Submit Test</button></div></div></section>`}
-function finish(){clearInterval(interval);interval=null;let score=Object.keys(answers).reduce((s,k)=>s+(answers[k]===demo[Number(k)%demo.length][5] ? 4:-1),0);page="result";document.querySelector("#app").innerHTML=`<section class="result"><span class="ey">CBT SUBMITTED</span><h1>${score} Marks</h1><p class="sub">This is the working demo scoring flow (+4/−1). Production AIR requires authenticated students, the verified full question bank, server-side scoring and simultaneous test controls.</p><button class="primary" onclick="go('home')">Back to RANKLY</button></section>`;nav()}
+let page="home";
+let currentTest=null;
+let questions=[];
+let answers={};
+let marked={};
+let current=0;
+let time=0;
+let interval=null;
+let testStarted=false;
+
+function nav(p){
+  clearInterval(interval);
+  page=p;
+  testStarted=false;
+  render();
+  window.scrollTo(0,0);
+}
+
+function startTest(index){
+
+  currentTest=tests[index];
+
+  /*
+    For now the CBT engine uses the demo question bank.
+    Later we can connect 180 verified questions to every test.
+  */
+  questions=[...demo];
+
+  answers={};
+  marked={};
+  current=0;
+
+  /*
+    NEET CBT timer.
+    Demo uses 30 minutes.
+    Change to 200 minutes when the complete 180-question
+    paper is connected.
+  */
+  time=30*60;
+
+  testStarted=true;
+  page="cbt";
+
+  clearInterval(interval);
+  interval=setInterval(()=>{
+    time--;
+
+    if(time<=0){
+      clearInterval(interval);
+      finish();
+      return;
+    }
+
+    const timer=document.getElementById("timer");
+    if(timer) timer.textContent=formatTime(time);
+  },1000);
+
+  render();
+  window.scrollTo(0,0);
+}
+
+function formatTime(sec){
+  const m=Math.floor(sec/60);
+  const s=sec%60;
+  return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+}
+
+function selectAnswer(i){
+  answers[questions[current].id]=i;
+  renderCBT();
+}
+
+function toggleMark(){
+  const id=questions[current].id;
+  marked[id]=!marked[id];
+  renderCBT();
+}
+
+function previousQuestion(){
+  if(current>0){
+    current--;
+    renderCBT();
+  }
+}
+
+function nextQuestion(){
+  if(current<questions.length-1){
+    current++;
+    renderCBT();
+  }
+}
+
+function jumpQuestion(i){
+  current=i;
+  renderCBT();
+}
+
+function finish(){
+
+  clearInterval(interval);
+
+  let score=0;
+  let correct=0;
+  let wrong=0;
+  let unattempted=0;
+
+  questions.forEach(q=>{
+    const selected=answers[q.id];
+
+    if(selected===undefined){
+      unattempted++;
+    }else if(selected===q.answer){
+      correct++;
+      score+=4;
+    }else{
+      wrong++;
+      score-=1;
+    }
+  });
+
+  page="result";
+
+  window.__result={
+    score,
+    correct,
+    wrong,
+    unattempted,
+    total:questions.length
+  };
+
+  render();
+  window.scrollTo(0,0);
+}
+
+function renderCBT(){
+
+  const q=questions[current];
+
+  const answeredCount=Object.keys(answers).length;
+  const markedCount=Object.values(marked).filter(Boolean).length;
+
+  document.getElementById("app").innerHTML=`
+
+    <section class="page">
+
+      <div class="testbar">
+
+        <div>
+          <strong>${currentTest ? currentTest[2] : "RANKLY TEST"}</strong>
+          <div class="sub">${currentTest ? currentTest[0] : "NEET 2027"}</div>
+        </div>
+
+        <div class="timerbox">
+          ⏱ <span id="timer">${formatTime(time)}</span>
+        </div>
+
+      </div>
+
+      <div class="cbtstats">
+        <span>Answered: ${answeredCount}/${questions.length}</span>
+        <span>Marked: ${markedCount}</span>
+      </div>
+
+      <div class="cbtgrid">
+
+        <main class="questionbox">
+
+          <div class="qtop">
+            <span>Question ${current+1} of ${questions.length}</span>
+            <span>${q.subject}</span>
+          </div>
+
+          <h2>${q.q}</h2>
+
+          <div class="options">
+
+            ${q.options.map((op,i)=>`
+
+              <button
+                class="option ${answers[q.id]===i ? "selected":""}"
+                onclick="selectAnswer(${i})"
+              >
+                <span>${String.fromCharCode(65+i)}</span>
+                ${op}
+              </button>
+
+            `).join("")}
+
+          </div>
+
+          <div class="actions">
+
+            <button onclick="previousQuestion()">
+              ← Previous
+            </button>
+
+            <button onclick="toggleMark()">
+              ${marked[q.id] ? "★ Unmark" : "☆ Mark for Review"}
+            </button>
+
+            ${
+              current<questions.length-1
+              ? `<button class="primary" onclick="nextQuestion()">Save & Next →</button>`
+              : `<button class="submit" onclick="finish()">Submit Test</button>`
+            }
+
+          </div>
+
+        </main>
+
+        <aside class="palette">
+
+          <h3>Question Palette</h3>
+
+          <div class="legend">
+            <span>🟢 Answered</span>
+            <span>⚪ Not Answered</span>
+            <span>🟡 Review</span>
+          </div>
+
+          <div class="qnumbers">
+
+            ${questions.map((x,i)=>`
+
+              <button
+                class="
+                  qnum
+                  ${answers[x.id]!==undefined ? "answered":""}
+                  ${marked[x.id] ? "review":""}
+                  ${current===i ? "active":""}
+                "
+                onclick="jumpQuestion(${i})"
+              >
+                ${i+1}
+              </button>
+
+            `).join("")}
+
+          </div>
+
+          <button class="finishbtn" onclick="finish()">
+            Submit Test
+          </button>
+
+        </aside>
+
+      </div>
+
+    </section>
+  `;
+
+  const timer=document.getElementById("timer");
+
+  if(timer){
+    timer.textContent=formatTime(time);
+  }
+}
+
+function renderResult(){
+
+  const r=window.__result || {
+    score:0,
+    correct:0,
+    wrong:0,
+    unattempted:0,
+    total:0
+  };
+
+  const maxMarks=r.total*4;
+
+  document.getElementById("app").innerHTML=`
+
+    <section class="page">
+
+      <div class="resulthero">
+
+        <span class="badge">TEST COMPLETED</span>
+
+        <h1>Your Result</h1>
+
+        <div class="score">${r.score}</div>
+
+        <p>Score out of ${maxMarks}</p>
+
+      </div>
+
+      <div class="resultgrid">
+
+        <div class="resultcard">
+          <b>${r.correct}</b>
+          <span>Correct</span>
+        </div>
+
+        <div class="resultcard">
+          <b>${r.wrong}</b>
+          <span>Wrong</span>
+        </div>
+
+        <div class="resultcard">
+          <b>${r.unattempted}</b>
+          <span>Unattempted</span>
+        </div>
+
+        <div class="resultcard">
+          <b>${r.total ? Math.round((r.correct/r.total)*100) : 0}%</b>
+          <span>Accuracy</span>
+        </div>
+
+      </div>
+
+      <div class="panel">
+
+        <h2>Scoring Breakdown</h2>
+
+        <p>Correct: +4 × ${r.correct}</p>
+        <p>Wrong: −1 × ${r.wrong}</p>
+        <p>Unattempted: 0 × ${r.unattempted}</p>
+
+        <hr>
+
+        <h2>Total Score: ${r.score}</h2>
+
+      </div>
+
+      <div class="actions">
+
+        <button onclick="nav('home')">
+          ← Back to RANKLY
+        </button>
+
+        <button class="primary" onclick="nav('schedule')">
+          View Test Schedule
+        </button>
+
+      </div>
+
+    </section>
+  `;
+}
+
+function renderHome(){
+
+  document.getElementById("app").innerHTML=`
+
+    <section class="hero">
+
+      <span class="badge">NEET 2027 • AIR TEST SERIES</span>
+
+      <h1>
+        Test smarter.<br>
+        <span>Rank higher.</span>
+      </h1>
+
+      <p>
+        RANKLY is built around scheduled CBT tests,
+        custom practice, verified PYQs and meaningful
+        performance analysis.
+      </p>
+
+      <button class="primary big" onclick="nav('schedule')">
+        View 33-Test Schedule →
+      </button>
+
+    </section>
+
+    <section class="grid">
+
+      <div class="card">
+        <h2>🏆 AIR Test Series</h2>
+        <p>
+          33 scheduled tests from 20 Sep 2026
+          to 02 May 2027.
+        </p>
+        <button onclick="nav('schedule')">
+          View Tests →
+        </button>
+      </div>
+
+      <div class="card">
+        <h2>🎯 Custom CBT</h2>
+        <p>
+          Choose subject, chapter, topic and
+          question count.
+        </p>
+        <button onclick="nav('custom')">
+          Create Test →
+        </button>
+      </div>
+
+      <div class="card">
+        <h2>📚 PYQ Bank</h2>
+        <p>
+          Practice NEET previous-year questions.
+        </p>
+        <button onclick="nav('pyq')">
+          Open PYQs →
+        </button>
+      </div>
+
+    </section>
+  `;
+}
+
+function renderSchedule(){
+
+  document.getElementById("app").innerHTML=`
+
+    <section class="page">
+
+      <span class="badge">NEET 2027</span>
+
+      <h1>33-Test AIR Schedule</h1>
+
+      <p class="sub">
+        Scheduled tests from September 2026
+        to May 2027.
+      </p>
+
+      <div class="testlist">
+
+        ${tests.map((t,i)=>`
+
+          <div class="testcard">
+
+            <div>
+              <span class="testid">${t[0]}</span>
+
+              <h2>${t[2]}</h2>
+
+              <p>${t[1]}</p>
+
+              <small>
+                ${t.slice(3).filter(Boolean).join(" • ")}
+              </small>
+            </div>
+
+            <button
+              class="primary"
+              onclick="startTest(${i})"
+            >
+              Start Test →
+            </button>
+
+          </div>
+
+        `).join("")}
+
+      </div>
+
+    </section>
+  `;
+}
+
+function renderCustom(){
+
+  document.getElementById("app").innerHTML=`
+
+    <section class="page">
+
+      <span class="badge">CUSTOM CBT</span>
+
+      <h1>Create Your Test</h1>
+
+      <p class="sub">
+        Build a practice test according to your
+        subject and difficulty.
+      </p>
+
+      <div class="panel">
+
+        <label>Subject</label>
+
+        <select id="customSubject">
+          <option>Physics</option>
+          <option>Chemistry</option>
+          <option>Biology</option>
+          <option>Full Syllabus</option>
+        </select>
+
+        <label>Questions</label>
+
+        <select id="customCount">
+          <option value="10">10 Questions</option>
+          <option value="30">30 Questions</option>
+          <option value="45">45 Questions</option>
+          <option value="90">90 Questions</option>
+          <option value="180">180 Questions</option>
+        </select>
+
+        <button class="primary" onclick="startCustom()">
+          Generate CBT →
+        </button>
+
+      </div>
+
+    </section>
+  `;
+}
+
+function startCustom(){
+
+  const subject=document.getElementById("customSubject").value;
+  const count=Number(document.getElementById("customCount").value);
+
+  let bank=demo;
+
+  if(subject!=="Full Syllabus"){
+    bank=demo.filter(q=>q.subject===subject);
+  }
+
+  /*
+    Do not fake questions.
+    Only currently available verified questions are used.
+  */
+  questions=[...bank];
+
+  if(!questions.length){
+    alert("No questions available for this selection yet.");
+    return;
+  }
+
+  currentTest=[
+    "CUSTOM",
+    "",
+    subject+" Custom CBT"
+  ];
+
+  answers={};
+  marked={};
+  current=0;
+  time=Math.max(10,questions.length*60);
+
+  testStarted=true;
+  page="cbt";
+
+  clearInterval(interval);
+
+  interval=setInterval(()=>{
+    time--;
+
+    if(time<=0){
+      clearInterval(interval);
+      finish();
+    }
+
+    const timer=document.getElementById("timer");
+
+    if(timer){
+      timer.textContent=formatTime(time);
+    }
+  },1000);
+
+  render();
+}
+
+function renderPYQ(){
+
+  document.getElementById("app").innerHTML=`
+
+    <section class="page">
+
+      <span class="badge">PYQ BANK</span>
+
+      <h1>NEET Previous Year Questions</h1>
+
+      <p class="sub">
+        Verified PYQ practice will be added
+        chapter-wise.
+      </p>
+
+      <div class="panel">
+
+        <h2>Coming next</h2>
+
+        <p>
+          Physics • Chemistry • Biology
+        </p>
+
+        <p>
+          Chapter-wise → Topic-wise → Year-wise
+        </p>
+
+      </div>
+
+    </section>
+  `;
+}
+
+function render(){
+
+  const nav=document.getElementById("nav");
+
+  if(nav){
+
+    nav.innerHTML=`
+
+      <button onclick="nav('home')"
+        class="${page==='home'?'active':''}">
+        Home
+      </button>
+
+      <button onclick="nav('schedule')"
+        class="${page==='schedule'?'active':''}">
+        AIR Tests
+      </button>
+
+      <button onclick="nav('custom')"
+        class="${page==='custom'?'active':''}">
+        Custom CBT
+      </button>
+
+      <button onclick="nav('pyq')"
+        class="${page==='pyq'?'active':''}">
+        PYQ
+      </button>
+
+    `;
+  }
+
+  if(page==="home") renderHome();
+  else if(page==="schedule") renderSchedule();
+  else if(page==="custom") renderCustom();
+  else if(page==="pyq") renderPYQ();
+  else if(page==="cbt") renderCBT();
+  else if(page==="result") renderResult();
+}
+
 render();
-</script></body></html>
