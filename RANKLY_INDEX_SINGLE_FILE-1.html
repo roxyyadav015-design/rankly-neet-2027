@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RANKLY — NEET 2027</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#07111f;color:#edf6ff;font-family:system-ui,-apple-system,Segoe UI,sans-serif}button,input,select{font:inherit}button{cursor:pointer}
+.wrap{max-width:1100px;margin:auto;padding:0 16px}.top{height:70px;border-bottom:1px solid #1d344b;display:flex;align-items:center;justify-content:space-between}.logo{font-size:26px;font-weight:900}.logo i{color:#61d8ff;font-style:normal}.nav button{background:transparent;color:#9db0c5;border:0;padding:9px 11px;border-radius:9px}.nav button.on,.nav button:hover{background:#10253a;color:white}
+.hero{padding:65px 0 35px}.ey{font-size:12px;border:1px solid #29475f;border-radius:99px;padding:5px 10px;display:inline-block}.hero h1{font-size:clamp(48px,8vw,78px);line-height:.95;margin:18px 0}.blue{color:#61d8ff}.hero p{max-width:680px;color:#95a9bd;line-height:1.6}.primary{background:#61d8ff;color:#03131d;border:0;padding:13px 18px;border-radius:11px;font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card,.test,.panel,.notice{background:#0c1a2b;border:1px solid #203a52;border-radius:16px;padding:18px}.card p,.test p,.sub{color:#95a9bd;line-height:1.5}.page{padding:34px 0}.test{margin:12px 0}.row{display:flex;justify-content:space-between;gap:12px}.tag{font-size:11px;border:1px solid #2b4b65;border-radius:99px;padding:4px 8px}.lock{font-size:11px;color:#92a5ba}.syll{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}.syll div{background:#081624;padding:12px;border-radius:10px}.syll small{display:block;color:#a7b8ca;margin-top:5px;line-height:1.35}.panel{max-width:620px}.field{display:grid;gap:6px;margin:13px 0;color:#a9bacd}.field input,.field select{background:#081624;color:#fff;border:1px solid #29465e;border-radius:9px;padding:11px}.notice{margin:15px 0;color:#aebed0}.cbt{max-width:780px;margin:25px auto}.opt{width:100%;display:block;text-align:left;background:#0a1929;color:#eef6ff;border:1px solid #29465e;border-radius:9px;padding:13px;margin:8px 0}.opt.sel{border-color:#61d8ff;background:#102c40}.qbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.timer{font-size:21px;font-weight:900}.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}.actions button{background:#12283c;color:#fff;border:1px solid #29465e;border-radius:9px;padding:10px 13px}.actions .submit{background:#61d8ff;color:#03131d;border:0;font-weight:800}.result{text-align:center;padding:75px 0}.result h1{font-size:60px}@media(max-width:700px){.top{height:auto;padding:12px 0;align-items:flex-start;gap:8px}.nav{display:flex;flex-wrap:wrap;justify-content:flex-end}.syll{grid-template-columns:1fr}.row{flex-direction:column}}
+</style></head><body><div class="wrap">
+<header class="top"><div class="logo">RANK<span>LY</span></div><div class="nav" id="nav"></div></header><main id="app"></main><footer class="sub" style="text-align:center;padding:40px 0">RANKLY • NEET 2027 • Affordable testing for students</footer>
+</div>
+<script>
+const tests=[
+["01","20 Sep 2026","RFT-01","Rankly Focus Test","Units & Measurements / Motion in a Straight Line","Some Basic Concepts of Chemistry","Cell: The Unit of Life","Cell Cycle & Cell Division"],
+["02","27 Sep 2026","RBT-01","Rankly Booster Test","Motion in a Plane / Laws of Motion","Structure of Atom","Biomolecules","Animal Tissues"],
+["03","04 Oct 2026","RFT-02","Rankly Focus Test","Laws of Motion / Work, Energy & Power","Classification of Elements & Periodicity","The Living World","Structural Organisation in Animals"],
+["04","11 Oct 2026","RBT-02","Rankly Booster Test","Cumulative revision","Cumulative revision","Cumulative revision","Cumulative revision"],
+["05","18 Oct 2026","RFT-03","Rankly Focus Test","System of Particles & Rotational Motion","Chemical Bonding","Biological Classification","Breathing & Exchange of Gases"],
+["06","25 Oct 2026","RBT-03","Rankly Booster Test","Work, Energy & Power / Gravitation","Thermodynamics","Principles of Inheritance","Body Fluids & Circulation"],
+["07","01 Nov 2026","RFT-04","Rankly Focus Test","Gravitation / Mechanical Properties","Equilibrium","Molecular Basis of Inheritance","Excretory Products & Elimination"],
+["08","08 Nov 2026","RBT-04","Rankly Booster Test","Cumulative revision","Cumulative revision","Cumulative revision","Cumulative revision"],
+["09","15 Nov 2026","RFT-05","Rankly Focus Test","Thermal Properties / Thermodynamics","Redox Reactions","Anatomy of Flowering Plants","Locomotion & Movement"],
+["10","22 Nov 2026","RBT-05","Rankly Booster Test","Kinetic Theory / Oscillations","Solutions","Morphology of Flowering Plants","Neural Control & Coordination"],
+["11","29 Nov 2026","RFT-06","Rankly Focus Test","Waves","Electrochemistry","Plant Growth & Development","Chemical Coordination & Integration"],
+["12","06 Dec 2026","RBT-06","Rankly Booster Test","Cumulative revision","Cumulative revision","Cumulative revision","Cumulative revision"],
+["13","13 Dec 2026","RFT-07","Rankly Focus Test","Electric Charges & Fields","Chemical Kinetics","Photosynthesis in Plants","Animal Kingdom"],
+["14","20 Dec 2026","RBT-07","Rankly Booster Test","Electrostatic Potential & Capacitance","Haloalkanes & Haloarenes","Respiration in Plants","Human Reproduction"],
+["15","27 Dec 2026","RFT-08","Rankly Focus Test","Current Electricity","Alcohols, Phenols & Ethers","Microbes in Human Welfare","Reproductive Health"],
+["16","03 Jan 2027","RBT-08","Rankly Booster Test","Cumulative revision","Cumulative revision","Cumulative revision","Cumulative revision"],
+["17","10 Jan 2027","RFT-09","Rankly Focus Test","Moving Charges & Magnetism","Aldehydes, Ketones & Carboxylic Acids","Organisms & Populations","Evolution"],
+["18","17 Jan 2027","RBT-09","Rankly Booster Test","Magnetism & Matter","Amines","Ecosystem","Human Health & Disease"],
+["19","24 Jan 2027","RFT-10","Rankly Focus Test","Electromagnetic Induction","Biomolecules","Biodiversity & Conservation","Biotechnology: Principles"],
+["20","31 Jan 2027","RBT-10","Rankly Booster Test","Alternating Current","Coordination Compounds","Sexual Reproduction in Flowering Plants","Biotechnology: Applications"],
+["21","07 Feb 2027","RFT-11","Rankly Focus Test","Electromagnetic Waves / Ray Optics","d- and f-Block Elements","Inheritance revision","Human Health revision"],
+["22","14 Feb 2027","RBT-11","Rankly Booster Test","Wave Optics","Inorganic revision","Molecular Basis revision","Human Reproduction revision"],
+["23","21 Feb 2027","RFT-12","Rankly Focus Test","Dual Nature / Atoms","Organic revision","Photosynthesis revision","Reproductive Health revision"],
+["24","28 Feb 2027","RBT-12","Rankly Booster Test","Nuclei / Semiconductor Electronics","Physical Chemistry revision","Respiration revision","Evolution revision"],
+["25","07 Mar 2027","RFT-13","Rankly Focus Test","Modern Physics revision","Inorganic revision","Plant Growth revision","Biotechnology revision"],
+["26","14 Mar 2027","RBT-13","Rankly Booster Test","Optics revision","Organic revision","Ecology revision","Animal Biology revision"],
+["27","21 Mar 2027","RFT-14","Rankly Focus Test","Full Physics revision loop","Full Chemistry revision loop","Full Botany revision loop","Full Zoology revision loop"],
+["28","28 Mar 2027","RBT-14","Rankly Booster Test","Full Physics revision loop","Full Chemistry revision loop","Full Botany revision loop","Full Zoology revision loop"],
+["29","04 Apr 2027","PRE-NEET-01","Rankly Pre-NEET Major 01","Complete Class 11","Complete Class 11","Complete Class 11","Complete Class 11"],
+["30","11 Apr 2027","PRE-NEET-02","Rankly Pre-NEET Major 02","Complete Class 12","Complete Class 12","Complete Class 12","Complete Class 12"],
+["31","18 Apr 2027","UGM-01","Rankly Ultimate Grand Mock 01","Full Syllabus","Full Syllabus","Full Syllabus","Full Syllabus"],
+["32","25 Apr 2027","UGM-02","Rankly Ultimate Grand Mock 02","Full Syllabus","Full Syllabus","Full Syllabus","Full Syllabus"],
+["33","02 May 2027","FSS","Rankly Final Selection Simulator","Full Syllabus","Full Syllabus","Full Syllabus","Full Syllabus"]];
+
+const demo=[
+["Physics","Units & Measurements","Dimensions","Which quantity has the same dimensions as work?",["Power","Torque","Pressure","Impulse"],1],
+["Chemistry","Some Basic Concepts of Chemistry","Mole Concept","One mole of a substance contains:",["6.022×10²³ entities","3.011×10²³ entities","9.8×10²³ entities","1.0×10²³ entities"],0],
+["Biology","Cell: The Unit of Life","Cell organelles","The site of aerobic respiration in a eukaryotic cell is mainly:",["Ribosome","Mitochondrion","Golgi body","Lysosome"],1]
+];
+
+let page="home",answers={},qi=0,time=1200,interval=null;
+function nav(){document.querySelector("#nav").innerHTML=[["home","Home"],["schedule","AIR Tests"],["custom","Custom"],["pyq","PYQ"]].map(x=>`<button class="${page==x[0]?"on":""}" onclick="go('${x[0]}')">${x[1]}</button>`).join("")}
+function go(p){page=p;clearInterval(interval);render()}
+function render(){nav();let a=document.querySelector("#app");
+if(page=="home")a.innerHTML=`<section class="hero"><span class="ey">NEET 2027 • AIR TEST SERIES</span><h1>Test smarter.<br><span class="blue">Rank higher.</span></h1><p>RANKLY is built around scheduled CBT tests, custom practice, verified PYQs and meaningful performance analysis.</p><button class="primary" onclick="go('schedule')">View 33-Test Schedule →</button></section><div class="grid">${[["🏆","AIR Test Series","33 scheduled tests from 20 Sep 2026 to 02 May 2027."],["🎯","Custom CBT","Choose subject, chapter, topic and question count."],["📚","PYQ Bank","Chapter → topic → year organisation."],["📊","Analysis","Score, accuracy, time and chapter-level review."]].map(x=>`<div class="card"><h3>${x[0]} ${x[1]}</h3><p>${x[2]}</p></div>`).join("")}</div><div class="notice"><b>Important:</b> Upcoming tests stay locked. Results appear only after a real attempt is submitted.</div>`;
+else if(page=="schedule")a.innerHTML=`<section class="page"><h2>33-Test AIR Schedule</h2><p class="sub">One scheduled test every Sunday. Tests remain locked until their scheduled release.</p>${tests.map(t=>`<article class="test"><div class="row"><div><span class="tag">TEST ${t[0]} • ${t[2]}</span><h3>${t[3]}</h3><p>${t[1]} • 180 Questions • 200 Minutes</p></div><span class="lock">🔒 UPCOMING</span></div><div class="syll">${[["Physics",t[4]],["Chemistry",t[5]],["Botany",t[6]],["Zoology",t[7]]].map(x=>`<div><b>${x[0]}</b><small>${x[1]}</small></div>`).join("")}</div></article>`).join("")}</section>`;
+else if(page=="custom")a.innerHTML=`<section class="page"><h2>Create Custom Test</h2><p class="sub">Custom tests are independent of AIR.</p><div class="panel"><label class="field">Subject<select><option>Physics</option><option>Chemistry</option><option>Biology</option></select></label><label class="field">Chapter<input placeholder="Enter or choose chapter"></label><label class="field">Topic<input placeholder="Optional topic"></label><label class="field">Questions<input type="number" min="1" max="180" value="30"></label><button class="primary" onclick="go('cbt')">Generate CBT →</button></div></section>`;
+else if(page=="pyq")a.innerHTML=`<section class="page"><h2>NEET PYQ Bank</h2><p class="sub">Chapter-wise and topic-wise organisation with year/source metadata.</p><div class="grid">${["Physics","Chemistry","Biology"].map(s=>`<div class="card"><h3>${s}</h3><p>Chapter → Topic → Year → CBT</p><span class="tag">VERIFIED DATA ONLY</span></div>`).join("")}</div><div class="notice">Only questions that are legally permitted to be reproduced should be imported here. Historical PYQs must retain their source/year metadata.</div></section>`;
+else cbt(a)}
+function cbt(a){if(!interval){interval=setInterval(()=>{time--;if(time<=0){clearInterval(interval);finish()}renderCBT()},1000)}renderCBT()}
+function renderCBT(){if(page!="cbt")return;let a=document.querySelector("#app"),q=demo[qi%demo.length];a.innerHTML=`<section class="cbt"><div class="qbar"><b>RANKLY CBT</b><span class="timer">${String(Math.floor(time/60)).padStart(2,"0")}:${String(time%60).padStart(2,"0")}</span></div><div class="panel"><span class="tag">${q[0]} • Question ${qi+1}</span><h2>${q[3]}</h2>${q[4].map((o,j)=>`<button class="opt ${answers[qi]===j?"sel":""}" onclick="answers[qi]=${j};renderCBT()">${String.fromCharCode(65+j)}. ${o}</button>`).join("")}<div class="actions"><button onclick="qi=Math.max(0,qi-1);renderCBT()">Previous</button><button onclick="qi=Math.min(179,qi+1);renderCBT()">Next</button><button class="submit" onclick="finish()">Submit Test</button></div></div></section>`}
+function finish(){clearInterval(interval);interval=null;let score=Object.keys(answers).reduce((s,k)=>s+(answers[k]===demo[Number(k)%demo.length][5] ? 4:-1),0);page="result";document.querySelector("#app").innerHTML=`<section class="result"><span class="ey">CBT SUBMITTED</span><h1>${score} Marks</h1><p class="sub">This is the working demo scoring flow (+4/−1). Production AIR requires authenticated students, the verified full question bank, server-side scoring and simultaneous test controls.</p><button class="primary" onclick="go('home')">Back to RANKLY</button></section>`;nav()}
+render();
+</script></body></html>
